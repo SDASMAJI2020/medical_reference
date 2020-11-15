@@ -4,15 +4,21 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ERPMEDICAL.Models;
+using CoreModel.Model;
 
 namespace ERPMEDICAL.Controllers
 {
     public class HomeController : Controller
     {
+        private ErpMedical _contextERP;
+        public HomeController(ErpMedical contextERP)
+        {
+            _contextERP = contextERP;
+        }
         public IActionResult Index()
         {
-            return View();
+            var data= _contextERP.Product.ToList();
+            return View(data);
         }
 
         public IActionResult Login()
@@ -42,7 +48,8 @@ namespace ERPMEDICAL.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return null;
+            //return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

@@ -18,18 +18,30 @@ namespace ERPMEDICAL.Controllers
             response_status = new ResponseStatus();
             _Context = Context;
         }
-  
-        // GET: VendorController/Details/5
-        public ActionResult Details(int id)
+
+        [Route("/Vendor")]
+        [HttpGet]
+        public JsonResult Get()
         {
-            //find data from vendor table
-            var vendor = _Context.Vendor.Where(m => m.Id == id).FirstOrDefault();
-            return View(vendor);
+            var vendors = _Context.Vendor.ToList();
+            return Json(vendors);
+
         }
 
+            // GET: VendorController/Details/5
+        //[Route("/Vendor")]
+        //[HttpGet]
+        //public ActionResult Get(int id)
+        //{
+        //    //find data from vendor table
+        //    var vendor = _Context.Vendor.Where(m => m.Id == id).FirstOrDefault();
+        //    return View(vendor);
+        //}
+
         // POST: VendorController/Create
+        [Route("/Vendor")]
         [HttpPost]
-        public JsonResult Create(Vendor vendor)
+        public JsonResult Post(Vendor vendor)
         {
             try
             {
@@ -40,8 +52,10 @@ namespace ERPMEDICAL.Controllers
                 basetable.UpdatedBy = "";
                 //basetable.UpdatedDate = DateTime.Now;
                 _Context.Base.Add(basetable);
+                _Context.SaveChanges();
                 //Add vendor table
                 vendor.Baseid = basetable.Id;
+                vendor.CompanyId = 1;
                 _Context.Vendor.Add(vendor);
                 //save changes trigger for saving
                 _Context.SaveChanges();
@@ -62,8 +76,9 @@ namespace ERPMEDICAL.Controllers
 
 
         // POST: VendorController/Edit/5
+        [Route("/Vendor")]
         [HttpPut]
-        public ActionResult Edit(int id, Vendor vendor)
+        public ActionResult Put(int id, Vendor vendor)
         {
             try
             {
@@ -83,7 +98,7 @@ namespace ERPMEDICAL.Controllers
                 _Context.SaveChanges();
                 response_status.id = vendor.Id;
                 response_status.status = true;
-                response_status.successMessage = "data upadted successfull!!";
+                response_status.successMessage  = "data upadted successfull!!";
                 return Json(response_status);
             }
             catch (Exception err)
@@ -96,6 +111,7 @@ namespace ERPMEDICAL.Controllers
         }
 
         // POST: VendorController/Delete/5
+        [Route("/Vendor")]
         [HttpDelete]
         public ActionResult Delete(int id)
         {
